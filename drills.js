@@ -21,6 +21,8 @@ function powerCalculator(x, y) {
   }
 }
 
+powerCalculator(5,5);
+
 //reverse string
 
 function reverse(str) {
@@ -31,6 +33,8 @@ function reverse(str) {
   }
 }
 
+reverse('Hello');
+
 //triangle number
 
 function tri(n) {
@@ -40,6 +44,8 @@ function tri(n) {
     return n + tri(n - 1);
   }
 }
+
+tri(23);
 
 //string splitter
 
@@ -58,6 +64,8 @@ function fibonacci(n) {
     return s;
   }
 }
+
+fibonacci(20);
 
 //factorial
 
