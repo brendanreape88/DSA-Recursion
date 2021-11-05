@@ -1,0 +1,96 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+	  // match /{document=**} {
+    //   allow read, write;
+    // }
+    
+    // Catalog rules
+    match /shopertino_categories/{document=**} {
+    	allow read: if request.auth != null;
+    }
+    match /shopertino_products/{productId} { // List products
+    	allow read: if request.auth != null;
+    }
+    
+    // Order placement rules
+    // match /stripe_customers/{userId}/charges/{charge} { // Create a new charge belonging to self
+    //	allow create: if request.auth != null && request.auth.uid == userId;
+    //}
+    match /shopertino_orders/{order} { // List orders for self
+    	allow read: if request.auth != null && request.auth.uid == resource.data.user_id;
+    }
+    match /shopertino_orders/{order} { // Create a new order for self
+    	allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+    match /stripe_customers/{path=**} { // Create only to stripe documents
+    	allow create: if request.auth != null;
+    }
+    
+    // Own user doc rules
+    match /users_private/{userId}/{path=**} { // Update own private user document
+		 	allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{userId}/{path=**} { // Update own user document
+		 	allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{userId}/addresses/{address} { // Update own address documents
+		 	allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /friends/{userId}/{path=**} { // Update own friends document
+			allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /payment_methods/{card} { // Write your own cards
+    	allow write: if request.auth != null && request.auth.uid == request.resource.data.ownerId;
+    }
+    match /payment_methods/{card} { // Read your own cards
+    	allow read: if request.auth != null && request.auth.uid == resource.data.ownerId;
+    }
+
+    
+    // Friend rules
+    match /users/{otherUser} { // Read all public users
+    	allow read: if request.auth != null;
+    }
+    match /users/{otherUser}/pendingFriends/{userId} { // Add self as pending friend to other user
+			allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    // TODO: this needs to be done in a function (for both self and other)
+    match /users/{otherUser}/friends/{userId} { // Add self as friend to other user
+			allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{otherUser}/following/{userId} { // Remove self from following of other user
+			allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{otherUser}/notifications/{notificationId} { // Delete notification of self as pending friend to other user
+			allow delete: if request.auth != null && request.auth.uid == resource.data.sender && resource.data.type == 'friendRequest';
+    }
+    match /users/{otherUser}/notifications/{notificationId} { // Add notification of self as pending friend to other user
+			allow create: if request.auth != null && request.auth.uid == request.resource.data.sender;
+    }
+    match /users/{otherUser}/shoutouts/{shoutOutId} { // Add shoutout other user
+			allow create: if request.auth != null && request.auth.uid == request.resource.data.sender;
+    }
+    match /users/{otherUser}/followers/{userId} { // Add add self as follower of other users
+			allow create: if request.auth != null && request.auth.uid == userId;
+    }
+		match /friends/{friendId} { // Read others friend doc if in their friend list
+    	allow read: if request.auth != null && resource != null && resource.data.friends != null && request.auth.uid in resource.data.friends;
+    }
+    match /users/{otherUser}/friends/{friendId} { // Read others friends collection if in their friend list
+    	allow read: if request.auth != null && exists(/databases/$(database)/documents/users/$(otherUser)/friends/$(request.auth.uid))
+    }   
+    match /users/{otherUser}/wishlist/{wishedFor} { // Read wishlist if in other users friends list
+    	allow read: if request.auth != null && exists(/databases/$(database)/documents/users/$(otherUser)/friends/$(request.auth.uid))
+    }
+    match /users/{otherUser}/memories/{memory} { // Read memories if in other users friends list
+    	allow read: if request.auth != null && exists(/databases/$(database)/documents/users/$(otherUser)/friends/$(request.auth.uid))
+    }
+    match /users/{otherUser}/posts/{post} { // Read posts if in other users friends list
+    	allow read: if request.auth != null && exists(/databases/$(database)/documents/users/$(otherUser)/friends/$(request.auth.uid))
+    }
+    match /users/{otherUser}/gifts/{gift} { // Add gift to other users if from user
+    	allow create: if request.auth != null && request.auth.uid == request.resource.data.sender;
+    }
+  }
+}

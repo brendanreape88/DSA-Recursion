@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>477993886172-n45tp7vn3fctfg7hcbhfjp5hc4odoc3b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.477993886172-n45tp7vn3fctfg7hcbhfjp5hc4odoc3b</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCYb30JQqJjBzYmLgekN1Moig8LpLuPWLY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>477993886172</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kazoome</string>
+	<key>PROJECT_ID</key>
+	<string>kazoo-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kazoo-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:477993886172:ios:8e3e5e32bacdd3613eaf19</string>
+</dict>
+</plist>
